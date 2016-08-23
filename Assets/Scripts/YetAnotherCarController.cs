@@ -114,15 +114,13 @@ public class YetAnotherCarController : MonoBehaviour
             outputForce += wheelTorque[i].spinTorque;
         }
 
-        outputForce *= 0.35f;
-
         wheelTorque[0].rollSpeed = outputForce;
         wheelTorque[1].rollSpeed = -outputForce;
         wheelTorque[2].rollSpeed = outputForce;
         wheelTorque[3].rollSpeed = -outputForce;
 
-        rigidbody.AddForce(transform.forward * outputForce * 100);
-        //transform.Translate(transform.forward * (outputForce) * Time.deltaTime);
+        //rigidbody.AddForce(transform.forward * outputForce * 100);
+        transform.Translate(transform.forward * (outputForce) * Time.deltaTime);
     }
 
 }
