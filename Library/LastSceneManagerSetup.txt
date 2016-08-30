@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scenes/WorldSetup.unity
+- path: Assets/Scenes/Tracks.unity
   isLoaded: 1
   isActive: 1

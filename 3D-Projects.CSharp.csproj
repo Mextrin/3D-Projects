@@ -72,6 +72,7 @@
     <Compile Include="Assets\Scripts\LookAtCamera.cs" />
     <Compile Include="Assets\Scripts\Menu.cs" />
     <Compile Include="Assets\Scripts\MenuNavigation.cs" />
+    <Compile Include="Assets\Scripts\MeshBending.cs" />
     <Compile Include="Assets\Scripts\OneMoreCarController.cs" />
     <Compile Include="Assets\Scripts\PauseMenu.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerMovement.cs" />
