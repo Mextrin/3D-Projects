@@ -80,6 +80,7 @@
     <Compile Include="Assets\Scripts\Projectile.cs" />
     <Compile Include="Assets\Scripts\Shooter.cs" />
     <Compile Include="Assets\Scripts\TestScript.cs" />
+    <Compile Include="Assets\Scripts\TrackStreching.cs" />
     <Compile Include="Assets\Scripts\Turret\Turret.cs" />
     <Compile Include="Assets\Scripts\WheelRolling.cs" />
     <Compile Include="Assets\Scripts\YetAnotherCarController.cs" />
