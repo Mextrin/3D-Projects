@@ -20,7 +20,7 @@ public class MeshBending : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        mesh = GetComponent<MeshFilter>().mesh;
+        mesh = GetComponent<MeshFilter>().sharedMesh;
         Vector3[] vertices;
         float meshWidth;
 
