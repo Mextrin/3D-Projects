@@ -24,7 +24,7 @@ public class YetAnotherCarController : MonoBehaviour
     public float currentAngle;
     public float steeringInput;
     //
-    //Rigidbody rigidbody;
+    Rigidbody rigidbody;
 
     float timeStart, currentTime;
     bool stillholding;
@@ -32,7 +32,7 @@ public class YetAnotherCarController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        //rigidbody = GetComponent<Rigidbody>();
+        rigidbody = GetComponent<Rigidbody>();
         //
         //gear = new float[]
         //    {
@@ -173,13 +173,21 @@ public class YetAnotherCarController : MonoBehaviour
 
         }
 
-
+        float steeringPercentage = 0;
+        for (int i = 0; i < 2; i++)
+        {
+            if (wheel[i].isGrounded)
+            {
+                steeringPercentage++;
+            }
+        }
+        steeringPercentage /= 2;
 
         float t = (Time.time - timeStart);
         velocity = (currentAcceleration * t) + prevVelocity;
-        Debug.Log("             " + (velocity * 60 * 60) / 1000 + " km/h " + (prevVelocity * 60 * 60) / 1000);
+        //Debug.Log("             " + (velocity * 60 * 60) / 1000 + " km/h " + (prevVelocity * 60 * 60) / 1000);
         
-        currentAngle = (maxAngle * steeringInput) * Mathf.Lerp(0, 1, velocity * 0.1f);
+        currentAngle = (maxAngle * steeringInput * steeringPercentage) * Mathf.Lerp(0, 1, velocity * 0.1f);
 
         wheel[0].rollSpeed = velocity;
         wheel[1].rollSpeed = -velocity;
