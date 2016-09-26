@@ -23,6 +23,8 @@ public class WheelRolling : MonoBehaviour
         transform.localRotation = Quaternion.AngleAxis(currentAngle + startAngle, Vector3.up);
     }
 
+
+
     void OnTriggerStay(Collider collision)
     {
         if (!isGrounded)

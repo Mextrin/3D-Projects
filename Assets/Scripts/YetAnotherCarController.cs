@@ -118,7 +118,7 @@ public class YetAnotherCarController : MonoBehaviour
 
         if (Input.GetKey(KeyCode.UpArrow) && Input.GetKey(KeyCode.DownArrow))
         {
-            
+
         }
         else if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.DownArrow))
         {
@@ -185,8 +185,8 @@ public class YetAnotherCarController : MonoBehaviour
 
         float t = (Time.time - timeStart);
         velocity = (currentAcceleration * t) + prevVelocity;
-        //Debug.Log("             " + (velocity * 60 * 60) / 1000 + " km/h " + (prevVelocity * 60 * 60) / 1000);
-        
+        //Debug.Log("             " + (velocity  60  60) / 1000 + " km/h " + (prevVelocity  60  60) / 1000);
+
         currentAngle = (maxAngle * steeringInput * steeringPercentage) * Mathf.Lerp(0, 1, velocity * 0.1f);
 
         wheel[0].rollSpeed = velocity;
