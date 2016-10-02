@@ -67,6 +67,7 @@
     <Compile Include="Assets\Scripts\BodyMovement.cs" />
     <Compile Include="Assets\Scripts\CameraLookAt.cs" />
     <Compile Include="Assets\Scripts\CarController.cs" />
+    <Compile Include="Assets\Scripts\GUIController.cs" />
     <Compile Include="Assets\Scripts\Health.cs" />
     <Compile Include="Assets\Scripts\Leftovers\Gravity.cs" />
     <Compile Include="Assets\Scripts\LookAtCamera.cs" />

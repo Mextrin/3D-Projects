@@ -1,8 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class RPMCarController : MonoBehaviour
 {
+
+    //Car details
     public float weight;
     public float dragResistance, rollResistance;
     public WheelRolling[] wheel = new WheelRolling[4];
@@ -26,14 +29,19 @@ public class RPMCarController : MonoBehaviour
     public float maxAngle;
     public float currentAngle;
     public float steeringInput;
-    //
+    
+    //Unity components
     Rigidbody rigidbody;
+    public Text speedText, gearText;
+    public Image RPM;
+    public Image gas;
+    public Image brakeImage;
+    
 
     // Use this for initialization
     void Start()
     {
         //Torque in lb.ft
-        maxTorque = CalculateTorque(maxRPM);
         rigidbody = GetComponent<Rigidbody>();
         
         gear = new float[]
@@ -52,8 +60,8 @@ public class RPMCarController : MonoBehaviour
     void Update()
     {
         steeringInput = Input.GetAxis("Steering");
-        gasInput = Input.GetAxis("Gas");
-        brakeInput = Input.GetAxis("Brake");
+        gas.fillAmount = gasInput = Input.GetAxis("Gas");
+        brakeImage.fillAmount = brakeInput = Input.GetAxis("Brake");
 
         if (Input.GetKeyDown(KeyCode.E))
         {
@@ -61,14 +69,40 @@ public class RPMCarController : MonoBehaviour
             {
                 currentGear++;
             }
-        
+            switch (currentGear)
+            {
+                case -1:
+                    gearText.text = "R";
+                    break;
+
+                case 0:
+                    gearText.text = "N";
+                    break;
+
+                default:
+                    gearText.text = currentGear.ToString();
+                    break;
+            }
         }
         
         if (Input.GetKeyDown(KeyCode.Q))
         {
             if (currentGear > -1)
                 currentGear--;
-        
+            switch (currentGear)
+            {
+                case -1:
+                    gearText.text = "R";
+                    break;
+
+                case 0:
+                    gearText.text = "N";
+                    break;
+
+                default:
+                    gearText.text = currentGear.ToString();
+                    break;
+            }
         }
 
         //Calculate resistance forces
@@ -82,34 +116,36 @@ public class RPMCarController : MonoBehaviour
 
         //power = torqueAtRPM * gear[currentGear + 1] * finalDriveAxleRatio * 0.7f;
         //float driveForce = currentRPM / gear[currentGear + 1] * finalDriveAxleRatio * 0.7f;
-        
-        
-        float engineTorque = gasInput * maxTorque;
-        float driveTorque = engineTorque * gear[currentGear + 1] * finalDriveAxleRatio * 0.7f;
-        Debug.Log("                 " + engineTorque);
 
+       
+        maxTorque = CalculateTorque(currentRPM);
+        torqueAtRPM = (gasInput * maxTorque);
+        float driveTorque = torqueAtRPM * gear[currentGear + 1] * finalDriveAxleRatio * 0.7f;
+        Debug.Log("                 " + torqueAtRPM);
 
-        torqueAtRPM = CalculateTorque(currentRPM);
         float outputForce = (driveTorque - (Mathf.Lerp(0, brake, brakeInput))) + totalDragResistance + totalRollResistance;
 
         acceleration = outputForce / weight;
         velocity += acceleration;
+        speedText.text = ((int)(velocity * 60 * 60) / 1000).ToString();
         //Debug.Log("             " + (velocity * 60 * 60) / 1000 + " km/h");
 
         float wheelRollSpeed = velocity / wheel[0].wheelRadius;
-        currentRPM = (wheelRollSpeed * gear[currentGear + 1] * finalDriveAxleRatio * 60) / (2 * Mathf.PI);
+        currentRPM = (wheelRollSpeed * gear[currentGear + 1] * finalDriveAxleRatio) * (60 / (2 * Mathf.PI));
 
         if (currentRPM < idleRPM)
         {
             currentRPM = idleRPM;
         }
 
+        RPM.fillAmount = (currentRPM / maxRPM) / 2;
+
         transform.Translate(transform.forward * velocity * Time.deltaTime, Space.World);
         
         currentAngle = (maxAngle * steeringInput);
         transform.Rotate(transform.up * currentAngle * Time.deltaTime);
-
-
+        
+        //wheel[0].rollSpeed = driveTorque;
 
     }
 
@@ -119,5 +155,5 @@ public class RPMCarController : MonoBehaviour
         return ((63.025f * horsePower) / RPM);
     }
 
-
+    
 }
