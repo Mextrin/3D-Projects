@@ -83,8 +83,8 @@ public class RPMCarController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.R))
         {
-            float currentRotation = transform.rotation.y;
-            transform.eulerAngles = new Vector3(0, currentRotation, 0);
+            Vector3 currentRotation = transform.eulerAngles;
+            transform.eulerAngles = new Vector3(0, currentRotation.y, currentRotation.z);
         }
 
         //Calculate RPM
@@ -99,8 +99,6 @@ public class RPMCarController : MonoBehaviour
             currentRPM = maxRPM;
         }
         
-        //RPM.fillAmount = ((CalculateTorque(maxRPM) / maxTorqueAtRPM)) * 0.75f;
-
         //Calculate resistance forces
         float totalDragResistance = -dragResistance * velocity * Mathf.Abs(velocity);
         float totalRollResistance = -rollResistance * velocity;
@@ -108,26 +106,17 @@ public class RPMCarController : MonoBehaviour
         //Set brake value
         float brake = Mathf.Abs(velocity) > 0.1f ? brakePower : 0;
 
-        //Calculate acceleration
+        maxTorqueAtRPM = (5252 * horsepower) / currentRPM;
+        horsepower = (maxTorqueAtRPM * currentRPM) / 5252;
+        currentTorque = (gasInput * maxTorqueAtRPM);
 
-        //Power = Resistance force + velocity / 0.75
-        horsepower = ((totalDragResistance + totalRollResistance) + (velocity + 1)) / 0.85f / 0.745699872f;
-
-        //Torque = HP / (2 * PI * Rev/s)
-        maxTorqueAtRPM = horsepower / (2 * Mathf.PI * (currentRPM / 60));
-
-        //maxTorqueAtRPM = CalculateTorque(currentRPM);
-
-        currentTorque = (gasInput * maxTorqueAtRPM) / gear[currentGear + 1];
-
-        float driveForce = currentTorque /** gear[currentGear + 1]*/ * finalDriveAxleRatio * 0.7f;// / 0.33f;
+        float driveForce = (currentTorque / gear[currentGear + 1]) * finalDriveAxleRatio * 0.7f;// / 0.33f;
         float outputForce = (driveForce - (Mathf.Lerp(0, brake, brakeInput))) + totalDragResistance + totalRollResistance;
-
+        
         acceleration = outputForce / weight;
         velocity += acceleration;
 
         float wheelRollSpeed = ((currentTorque * gear[currentGear + 1]) / 60) * 360 * Mathf.Deg2Rad;
-
 
         //rigidbody.AddForce(transform.forward * outputForce, ForceMode.Force);
         transform.Translate(transform.forward * velocity * Time.deltaTime, Space.World);
@@ -137,31 +126,6 @@ public class RPMCarController : MonoBehaviour
 
         //wheel[0].rollSpeed = driveTorque;
 
-    }
-
-    //float FindValue(float currentValue, float pointedValue, float peekPoint)
-    //{
-    //    //RPM to RPM by HP ----- Lerp(RPM, RPM, HP)
-    //    //return currentRPM / HPAtRPM;
-
-    //    float t = (currentValue / pointedValue);
-
-    //    float ULerpedValue = (1.0f - t) * 0 + t * peekPoint;
-
-    //    //Debug.Log("                 " + HPAtRPM * t);
-    //    //(a + (b - a)) * t;
-    //    //(0, HPAtRPM, Mathf.InverseLerp(0, ));
-    //    return ULerpedValue;
-    //}
-
-    //Torque in N.m
-    float CalculateTorque(float RPM)
-    {
-        //return ((63.025f * currentHP) / RPM) * 1.3559179f;
-
-        //h = (t * r) / 5252
-        return horsepower * (5252 / RPM);
-    
     }
 
 }

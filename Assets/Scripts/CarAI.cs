@@ -8,7 +8,9 @@ public class CarAI : MonoBehaviour, IDrive
     List<GameObject> targets = new List<GameObject>();
 
     float gas, brake, steer;
-    public float requiredVelocity = 50f;
+    public float requiredVelocity = 5f;
+
+    Vector3 midPoint;
 
     void Start()
     {
@@ -25,8 +27,8 @@ public class CarAI : MonoBehaviour, IDrive
 
         if (requiredVelocity > car.velocity)
         {
-            Debug.Log("                     " + (car.velocity) / requiredVelocity + " | " + requiredVelocity);
-            return (1 + car.velocity) / requiredVelocity;
+            Debug.Log("                     " + (1 - ((car.velocity) / requiredVelocity)) + " | " + requiredVelocity);
+            return 1 - ((car.velocity) / requiredVelocity);
         }
         return 0.25f;
     }
