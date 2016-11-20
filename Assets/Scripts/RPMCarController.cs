@@ -13,7 +13,7 @@ public class RPMCarController : MonoBehaviour
     public float dragResistance, rollResistance;
     public WheelRolling[] wheel = new WheelRolling[4];
     public AccelerationType driveType;
-    public float currentTorque, maxTorqueAtRPM;
+    public float engineTorque, maxTorqueAtRPM;
 
     public float maxRPM, idleRPM;
     public float currentRPM;
@@ -24,6 +24,7 @@ public class RPMCarController : MonoBehaviour
     public float acceleration;
     public float brakePower;
     public float velocity;
+    public float wheelAngularVelocity;
 
     public int currentGear;
     public float gearRRatio, gear1Ratio, gear2Ratio, gear3Ratio, gear4Ratio, gear5Ratio, gear6Ratio;
@@ -33,6 +34,9 @@ public class RPMCarController : MonoBehaviour
     public float maxAngle;
     public float currentAngle;
     public float steeringInput;
+
+    float wheelBase;
+    public Transform centerofGravity;
 
     //Unity components
     Rigidbody rigidbody;
@@ -56,6 +60,8 @@ public class RPMCarController : MonoBehaviour
                 gear5Ratio,
                 gear6Ratio,
             };
+
+        wheelBase = Vector3.Distance(wheel[0].transform.position, wheel[3].transform.position);
     }
 
     void Update()
@@ -84,11 +90,11 @@ public class RPMCarController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R))
         {
             Vector3 currentRotation = transform.eulerAngles;
-            transform.eulerAngles = new Vector3(0, currentRotation.y, currentRotation.z);
+            transform.eulerAngles = new Vector3(0, currentRotation.y + 2f, currentRotation.z);
         }
 
         //Calculate RPM
-        currentRPM = ((velocity / 0.35f) * gear[currentGear + 1] * finalDriveAxleRatio * 60) / (2 * Mathf.PI);
+        //currentRPM = (wheelAngularVelocity * gear[currentGear + 1] * finalDriveAxleRatio * 60) / (2 * Mathf.PI);
 
         if (currentRPM < idleRPM)
         {
@@ -98,25 +104,59 @@ public class RPMCarController : MonoBehaviour
         {
             currentRPM = maxRPM;
         }
-        
+
         //Calculate resistance forces
-        float totalDragResistance = -dragResistance * velocity * Mathf.Abs(velocity);
-        float totalRollResistance = -rollResistance * velocity;
+        float dragResistanceForce = -dragResistance * velocity * Mathf.Abs(velocity);
+        float rollResistanceForce = -rollResistance * velocity;
 
         //Set brake value
-        float brake = Mathf.Abs(velocity) > 0.1f ? brakePower : 0;
+        float maxTractionForceF;
+        float maxTractionForceR;
+
+        float b = Mathf.Abs(centerofGravity.position.z - wheel[0].transform.position.z); //Front wheels
+        float c = Mathf.Abs(centerofGravity.position.z - wheel[3].transform.position.z); //Back wheels
+        float h = Mathf.Abs(centerofGravity.position.y - (wheel[0].transform.position.y - 0.35f));
+
+        if (velocity < 0.1f)
+        {
+            //W = (a / wheelBase) * W
+            //FMax = 1.2f * ((a / wheelBase) * W)
+            maxTractionForceF = 1.2f * ((c / wheelBase) * weight * 9.8f);
+            maxTractionForceR = 1.2f * ((b / wheelBase) * weight * 9.8f);
+        }
+        else
+        {
+            //FMax = 1.2f * ((a / wheelBase) * weight * 9.8f +- (1.6f / wheelBase) * weight * acceleration)
+            maxTractionForceF = 1.2f * (c / wheelBase) * weight * 9.8f - (h / wheelBase) * weight * acceleration;
+            maxTractionForceR = 1.2f * (b / wheelBase) * weight * 9.8f + (h / wheelBase) * weight * acceleration;
+        }
 
         maxTorqueAtRPM = (5252 * horsepower) / currentRPM;
         horsepower = (maxTorqueAtRPM * currentRPM) / 5252;
-        currentTorque = (gasInput * maxTorqueAtRPM);
+        engineTorque = (Mathf.Sqrt(gasInput) * maxTorqueAtRPM);
+        float brakeTorque = (Mathf.Abs(velocity) > 0.1f ? brakePower : 0) * brakeInput;
 
-        float driveForce = (currentTorque / gear[currentGear + 1]) * finalDriveAxleRatio * 0.7f;// / 0.33f;
-        float outputForce = (driveForce - (Mathf.Lerp(0, brake, brakeInput))) + totalDragResistance + totalRollResistance;
-        
-        acceleration = outputForce / weight;
+        float driveTorque = (engineTorque / (gear[currentGear + 1] * finalDriveAxleRatio)) * 0.7f;
+
+        //P = T * 2 * pi * rps
+        //rps = (T * 2 * pi) / P
+        float wheelRollSpeed = velocity / (2 * Mathf.PI * 0.35f); //Always rolling
+
+
+        wheelAngularVelocity = (driveTorque / horsepower) * 2 * Mathf.PI;
+        Debug.Log("                      " + driveTorque + " N.m");
+        float slipRatio = ((wheelAngularVelocity * 0.35f) - velocity) / Mathf.Abs(velocity + 0.1f);
+        float totalForce = ((driveTorque) / 0.35f) + dragResistanceForce + rollResistanceForce;
+
+        //wheelAngularVelocity = driveTorque - (totalForce * 0.35f);
+
+
+
+
+
+
+        acceleration = totalForce / weight;
         velocity += acceleration;
-
-        float wheelRollSpeed = ((currentTorque * gear[currentGear + 1]) / 60) * 360 * Mathf.Deg2Rad;
 
         //rigidbody.AddForce(transform.forward * outputForce, ForceMode.Force);
         transform.Translate(transform.forward * velocity * Time.deltaTime, Space.World);
@@ -124,7 +164,10 @@ public class RPMCarController : MonoBehaviour
         currentAngle = (maxAngle * steeringInput);
         transform.Rotate(transform.up * currentAngle * Time.deltaTime);
 
-        //wheel[0].rollSpeed = driveTorque;
+        wheel[0].rollSpeed = wheelRollSpeed;
+        wheel[1].rollSpeed = -wheelRollSpeed;
+        wheel[2].rollSpeed = wheelAngularVelocity;
+        wheel[3].rollSpeed = -wheelAngularVelocity;
 
     }
 

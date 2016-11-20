@@ -27,7 +27,7 @@ public class CarAI : MonoBehaviour, IDrive
 
         if (requiredVelocity > car.velocity)
         {
-            Debug.Log("                     " + (1 - ((car.velocity) / requiredVelocity)) + " | " + requiredVelocity);
+            //Debug.Log("                     " + (1 - ((car.velocity) / requiredVelocity)) + " | " + requiredVelocity);
             return 1 - ((car.velocity) / requiredVelocity);
         }
         return 0.25f;
@@ -37,7 +37,7 @@ public class CarAI : MonoBehaviour, IDrive
     {
         if (requiredVelocity < car.velocity)
         {
-            Debug.Log("                     " + car.velocity / requiredVelocity + " | " + requiredVelocity);
+            //Debug.Log("                     " + car.velocity / requiredVelocity + " | " + requiredVelocity);
             return requiredVelocity / car.velocity;
         }
         return 0;
