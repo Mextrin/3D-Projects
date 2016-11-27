@@ -24,7 +24,7 @@ public class WheelRolling : MonoBehaviour
     {
         float output = rollSpeed * Mathf.PI * 2 * Mathf.Rad2Deg;
         transform.Rotate(-Vector3.forward * output * Time.deltaTime);
-        //transform.localRotation = Quaternion.AngleAxis(currentAngle + startAngle, Vector3.up);
+        transform.parent.localRotation = Quaternion.AngleAxis(currentAngle + startAngle, Vector3.up);
 
 
     }

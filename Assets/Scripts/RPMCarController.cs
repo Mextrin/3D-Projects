@@ -12,6 +12,7 @@ public class RPMCarController : MonoBehaviour
     public float weight;
     public float dragResistance, rollResistance;
     public WheelRolling[] wheel = new WheelRolling[4];
+    public ParticleSystem[] skidSmoke;
     public AccelerationType driveType;
     public float engineTorque, maxTorqueAtRPM;
 
@@ -32,11 +33,12 @@ public class RPMCarController : MonoBehaviour
     float[] gear;
 
     public float maxAngle;
-    public float currentAngle;
+    public float wheelAngle;
     public float steeringInput;
 
     float wheelBase;
     public Transform centerofGravity;
+    Transform forcesOnCar;
 
     //Unity components
     Rigidbody rigidbody;
@@ -44,6 +46,7 @@ public class RPMCarController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        forcesOnCar = transform.parent;
         controller = GetComponentsInChildren<IDrive>();
 
         //Torque in lb.ft
@@ -94,7 +97,7 @@ public class RPMCarController : MonoBehaviour
         }
 
         //Calculate RPM
-        //currentRPM = (wheelAngularVelocity * gear[currentGear + 1] * finalDriveAxleRatio * 60) / (2 * Mathf.PI);
+        currentRPM = (wheelAngularVelocity * gear[currentGear + 1] * finalDriveAxleRatio * 60);
 
         if (currentRPM < idleRPM)
         {
@@ -134,7 +137,7 @@ public class RPMCarController : MonoBehaviour
         maxTorqueAtRPM = (5252 * horsepower) / currentRPM;
         horsepower = (maxTorqueAtRPM * currentRPM) / 5252;
         engineTorque = (Mathf.Sqrt(gasInput) * maxTorqueAtRPM);
-        float brakeTorque = (Mathf.Abs(velocity) > 0.1f ? brakePower : 0) * brakeInput;
+        float brakeTorque = (Mathf.Abs(velocity) > 0.25f ? brakePower : 0) * brakeInput;
 
         float driveTorque = (engineTorque / (gear[currentGear + 1] * finalDriveAxleRatio)) * 0.7f;
 
@@ -143,32 +146,54 @@ public class RPMCarController : MonoBehaviour
         float wheelRollSpeed = velocity / (2 * Mathf.PI * 0.35f); //Always rolling
 
 
-        wheelAngularVelocity = (driveTorque / horsepower) * 2 * Mathf.PI;
-        Debug.Log("                      " + driveTorque + " N.m");
-        float slipRatio = ((wheelAngularVelocity * 0.35f) - velocity) / Mathf.Abs(velocity + 0.1f);
-        float totalForce = ((driveTorque) / 0.35f) + dragResistanceForce + rollResistanceForce;
+        wheelAngularVelocity = (((driveTorque - brakeTorque) / horsepower) * 2 * Mathf.PI) + wheelRollSpeed;
+        //float slipRatio = (wheelAngularVelocity * (0.35f - velocity)) / Mathf.Abs(velocity + 0.1f);
+        float slipRatio = wheelRollSpeed / wheelAngularVelocity;
+        //float slipRatio = ((wheelAngularVelocity * 0.35f) - wheelRollSpeed) / wheelRollSpeed != 0 ? Mathf.Abs(wheelRollSpeed) : 1f;
+
+        //Debug.Log("                      " + (1 - slipRatio) + " %");
+        float totalForce = (((driveTorque - brakeTorque) / 0.35f) * (slipRatio > 0 ? slipRatio + 0.1f : 1)) + dragResistanceForce + rollResistanceForce;
 
         //wheelAngularVelocity = driveTorque - (totalForce * 0.35f);
-
-
-
-
+        
 
 
         acceleration = totalForce / weight;
         velocity += acceleration;
 
         //rigidbody.AddForce(transform.forward * outputForce, ForceMode.Force);
-        transform.Translate(transform.forward * velocity * Time.deltaTime, Space.World);
+        forcesOnCar.Translate(transform.forward * velocity * Time.deltaTime, Space.World);
 
-        currentAngle = (maxAngle * steeringInput);
-        transform.Rotate(transform.up * currentAngle * Time.deltaTime);
+
+        for (int i = 0; i < skidSmoke.Length; i++)
+        {
+            skidSmoke[i].emissionRate = 250f * (0.8f - slipRatio);
+        }
+
+
+        //Input
+        wheelAngle = (maxAngle * steeringInput);
+
+
+        //Basic steering
+        float raduisToMidPoint = wheelBase / (wheelAngle);
+        float rotationMovement = velocity / raduisToMidPoint;
+
+        //Advanced Steering
+        float tireHeading = forcesOnCar.eulerAngles.y + wheelAngle;
+        float alpha = transform.eulerAngles.y / tireHeading; //Angle
+
+        Debug.Log("                " + tireHeading + " " + transform.eulerAngles.y + " >> " + alpha); 
+
+        forcesOnCar.Rotate(transform.up * rotationMovement * Time.deltaTime);
 
         wheel[0].rollSpeed = wheelRollSpeed;
         wheel[1].rollSpeed = -wheelRollSpeed;
         wheel[2].rollSpeed = wheelAngularVelocity;
         wheel[3].rollSpeed = -wheelAngularVelocity;
 
+        wheel[0].currentAngle = wheelAngle;
+        wheel[1].currentAngle = wheelAngle;
     }
 
 }
