@@ -5,7 +5,7 @@ using System;
 
 public class PlayerInput : MonoBehaviour, IDrive
 {
-    RPMCarController car;
+    WheelColliderController car;
 
     public Text speedText, gearText;
     public Image RPM;
@@ -14,7 +14,7 @@ public class PlayerInput : MonoBehaviour, IDrive
 
     void Start()
     {
-        car = GetComponentInParent<RPMCarController>();
+        car = GetComponentInParent<WheelColliderController>();
     }
 
     public float Acceleration()

@@ -87,6 +87,7 @@
     <Compile Include="Assets\Scripts\TestScript.cs" />
     <Compile Include="Assets\Scripts\TrackStreching.cs" />
     <Compile Include="Assets\Scripts\Turret\Turret.cs" />
+    <Compile Include="Assets\Scripts\WheelColliderController.cs" />
     <Compile Include="Assets\Scripts\WheelRolling.cs" />
     <Compile Include="Assets\Scripts\YetAnotherCarController.cs" />
     <Compile Include="Assets\Scripts\carControls.cs" />

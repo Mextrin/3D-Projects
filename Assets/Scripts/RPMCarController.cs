@@ -39,6 +39,7 @@ public class RPMCarController : MonoBehaviour
     float wheelBase;
     public Transform centerofGravity;
     Transform forcesOnCar;
+    public Vector3 velocities;
 
     //Unity components
     Rigidbody rigidbody;
@@ -50,7 +51,7 @@ public class RPMCarController : MonoBehaviour
         controller = GetComponentsInChildren<IDrive>();
 
         //Torque in lb.ft
-        rigidbody = GetComponent<Rigidbody>();
+        rigidbody = transform.parent.GetComponent<Rigidbody>();
 
         gear = new float[]
             {
@@ -160,8 +161,13 @@ public class RPMCarController : MonoBehaviour
 
         acceleration = totalForce / weight;
         velocity += acceleration;
+        //velocities.z += acceleration;
+        //velocity = velocities.z;
 
-        //rigidbody.AddForce(transform.forward * outputForce, ForceMode.Force);
+        //rigidbody.AddForce(Vector3.forward * velocity, ForceMode.Acceleration);
+
+        //Debug.Log("                     " + velocities);
+        //forcesOnCar.Translate(velocities * Time.deltaTime, Space.Self);
         forcesOnCar.Translate(transform.forward * velocity * Time.deltaTime, Space.World);
 
 
@@ -174,14 +180,14 @@ public class RPMCarController : MonoBehaviour
         //Input
         wheelAngle = (maxAngle * steeringInput);
 
-
         //Basic steering
         float raduisToMidPoint = wheelBase / (wheelAngle);
         float rotationMovement = velocity / raduisToMidPoint;
 
         //Advanced Steering
-        float tireHeading = forcesOnCar.eulerAngles.y + wheelAngle;
-        float alpha = transform.eulerAngles.y / tireHeading; //Angle
+        float tireHeading = forcesOnCar.eulerAngles.y + wheelAngle; //0 is forward
+        float carDirectionOfTravel = Mathf.Sqrt((velocities.x * velocities.x) + (velocities.z * velocities.z));
+        float alpha = Mathf.DeltaAngle(carDirectionOfTravel + forcesOnCar.rotation.y, tireHeading); //Angle
 
         Debug.Log("                " + tireHeading + " " + transform.eulerAngles.y + " >> " + alpha); 
 
