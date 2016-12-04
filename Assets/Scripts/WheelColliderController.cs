@@ -19,7 +19,7 @@ public class WheelColliderController : MonoBehaviour
     float gasInput, brakeInput;
     public float velocity;
     public float horsepower;
-    public float brakePower;
+    public float brakePower, handbrakePower;
 
     public int currentGear;
     public float gearRRatio, gear1Ratio, gear2Ratio, gear3Ratio, gear4Ratio, gear5Ratio, gear6Ratio;
@@ -79,16 +79,21 @@ public class WheelColliderController : MonoBehaviour
         {
             RPMSum += wheels[i].rpm;
         }
-        currentRPM = (RPMSum / wheels.Length) * gear[currentGear + 1] * finalDriveAxleRatio;
+        currentRPM = ((RPMSum * Mathf.Deg2Rad) / wheels.Length) * gear[currentGear + 1] * finalDriveAxleRatio;
 
         if (currentRPM < idleRPM)
         {
             currentRPM = idleRPM;
         }
 
+        if (currentRPM > maxRPM)
+        {
+            currentRPM = 100000f;
+        }
+
         float brake = brakeInput * brakePower;
 
-        maxTorqueAtRPM = (5252 * horsepower) / currentRPM;
+        //maxTorqueAtRPM = (5252 * horsepower) / currentRPM;
         horsepower = (maxTorqueAtRPM * currentRPM) / 5252;
         engineTorque = (gasInput * maxTorqueAtRPM);
 
