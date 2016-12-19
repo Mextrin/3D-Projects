@@ -77,7 +77,6 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\AnotherCarController.cs" />
     <Compile Include="Assets\Scripts\BodyMovement.cs" />
-    <Compile Include="Assets\Scripts\CameraLookAt.cs" />
     <Compile Include="Assets\Scripts\CameraShader.cs" />
     <Compile Include="Assets\Scripts\CarAI.cs" />
     <Compile Include="Assets\Scripts\CarController.cs" />
@@ -86,8 +85,12 @@
     <Compile Include="Assets\Scripts\IDrive.cs" />
     <Compile Include="Assets\Scripts\Leftovers\Gravity.cs" />
     <Compile Include="Assets\Scripts\LookAtCamera.cs" />
-    <Compile Include="Assets\Scripts\Menu.cs" />
-    <Compile Include="Assets\Scripts\MenuNavigation.cs" />
+    <Compile Include="Assets\Scripts\Menu\IMenu.cs" />
+    <Compile Include="Assets\Scripts\Menu\LoadSceneOnEnter.cs" />
+    <Compile Include="Assets\Scripts\Menu\Menu.cs" />
+    <Compile Include="Assets\Scripts\Menu\MenuNavigation.cs" />
+    <Compile Include="Assets\Scripts\Menu\MenuOption.cs" />
+    <Compile Include="Assets\Scripts\Menu\MoveToMenu.cs" />
     <Compile Include="Assets\Scripts\MeshBending.cs" />
     <Compile Include="Assets\Scripts\OneMoreCarController.cs" />
     <Compile Include="Assets\Scripts\PauseMenu.cs" />
@@ -107,8 +110,7 @@
     <Compile Include="Assets\Scripts\weaponControl.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\Shaders\PostEffectShader.shader" />
-    <None Include="Assets\Shaders\ShaderTesting.shader" />
+    <None Include="Assets\Shaders\LSD.shader" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />

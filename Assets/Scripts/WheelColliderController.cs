@@ -62,17 +62,17 @@ public class WheelColliderController : MonoBehaviour
             brakeInput = controller[currentController].Brake();
         }
 
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            if (currentGear < 6)
-                currentGear++;
-        }
-
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            if (currentGear > -1)
-                currentGear--;
-        }
+        //if (Input.GetKeyDown(KeyCode.E))
+        //{
+        //    if (currentGear < 6)
+        //        currentGear++;
+        //}
+        //
+        //if (Input.GetKeyDown(KeyCode.Q))
+        //{
+        //    if (currentGear > -1)
+        //        currentGear--;
+        //}
 
         float RPMSum = 0;
         for (int i = 0; i < wheels.Length; i++)
@@ -93,14 +93,12 @@ public class WheelColliderController : MonoBehaviour
 
         float brake = brakeInput * brakePower;
 
-        //maxTorqueAtRPM = (5252 * horsepower) / currentRPM;
+        maxTorqueAtRPM = (5252 * horsepower) / currentRPM;
         horsepower = (maxTorqueAtRPM * currentRPM) / 5252;
         engineTorque = (gasInput * maxTorqueAtRPM);
 
         float driveTorque = (engineTorque * (gear[currentGear + 1] * finalDriveAxleRatio)) * 0.7f;
         velocity = rigidbody.velocity.magnitude;
-
-
 
 
 
@@ -136,5 +134,5 @@ public class WheelColliderController : MonoBehaviour
         wheels[0].steerAngle = steeringInput * maxAngle;
         wheels[1].steerAngle = steeringInput * maxAngle;
     }
-    
+
 }

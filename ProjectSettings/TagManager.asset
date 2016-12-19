@@ -3,7 +3,9 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Playable Entity
+  - Checkpoint
   layers:
   - Default
   - TransparentFX
