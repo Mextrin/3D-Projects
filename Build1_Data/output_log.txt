@@ -1,0 +1,62 @@
+Mono path[0] = 'D:/UnityProjects/3D-Projects/Build1_Data/Managed'
+Mono path[1] = 'D:/UnityProjects/3D-Projects/Build1_Data/Mono'
+Mono config path = 'D:/UnityProjects/3D-Projects/Build1_Data/Mono/etc'
+PlayerConnection initialized from D:/UnityProjects/3D-Projects/Build1_Data (debug = 0)
+PlayerConnection initialized network socket : 0.0.0.0 55011
+Multi-casting "[IP] 192.168.0.5 [Port] 55011 [Flags] 2 [Guid] 4247115712 [EditorId] 2680128854 [Version] 1048832 [Id] WindowsPlayer(DESKTOP-PPR4C01) [Debug] 0" to [225.0.0.222:54997]...
+Started listening to [0.0.0.0:55011]
+PlayerConnection already initialized - listening to [0.0.0.0:55011]
+Initialize engine version: 5.5.0f3 (38b4efef76f0)
+GfxDevice: creating device client; threaded=1
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.0]
+    Renderer: NVIDIA GeForce GTX 980 (ID=0x13c0)
+    Vendor:   NVIDIA
+    VRAM:     3072 MB
+    Driver:   21.21.13.7619
+Begin MonoManager ReloadAssembly
+Platform assembly: D:\UnityProjects\3D-Projects\Build1_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading D:\UnityProjects\3D-Projects\Build1_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: D:\UnityProjects\3D-Projects\Build1_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading D:\UnityProjects\3D-Projects\Build1_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+Platform assembly: D:\UnityProjects\3D-Projects\Build1_Data\Managed\UnityEngine.UI.dll (this message is harmless)
+Loading D:\UnityProjects\3D-Projects\Build1_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
+Platform assembly: D:\UnityProjects\3D-Projects\Build1_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
+Loading D:\UnityProjects\3D-Projects\Build1_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
+Platform assembly: D:\UnityProjects\3D-Projects\Build1_Data\Managed\UnityEngine.PlaymodeTestsRunner.dll (this message is harmless)
+Loading D:\UnityProjects\3D-Projects\Build1_Data\Managed\UnityEngine.PlaymodeTestsRunner.dll into Unity Child Domain
+- Completed reload, in  0.181 seconds
+Platform assembly: D:\UnityProjects\3D-Projects\Build1_Data\Managed\System.Core.dll (this message is harmless)
+Platform assembly: D:\UnityProjects\3D-Projects\Build1_Data\Managed\System.dll (this message is harmless)
+desktop: 1920x1080 60Hz; virtual: 3840x1080 at 0,0
+<RI> Initializing input.
+<RI> Input initialized.
+<RI> Initialized touch support.
+UnloadTime: 4.369470 ms
+Setting up 2 worker threads for Enlighten.
+  Thread -> id: 1430 -> priority: 1 
+  Thread -> id: 40f4 -> priority: 1 
+Unloading 5 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 4.626072 ms
+System memory in use before: 32.5 MB.
+System memory in use after: 32.4 MB.
+
+Unloading 23 unused Assets to reduce memory usage. Loaded Objects now: 726.
+Total: 0.880038 ms (FindLiveObjects: 0.041562 ms CreateObjectMapping: 0.025901 ms MarkObjects: 0.377073 ms  DeleteObjects: 0.434899 ms)
+
+A connection has already been set as ready. There can only be one.
+UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
+UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:LogError(Object)
+UnityEngine.Networking.ClientScene:Ready(NetworkConnection) (at C:\buildslave\unity\build\Extensions\Networking\Runtime\ClientScene.cs:278)
+UnityEngine.Networking.NetworkManager:OnClientConnect(NetworkConnection) (at C:\buildslave\unity\build\Extensions\Networking\Runtime\NetworkManager.cs:1112)
+UnityEngine.Networking.NetworkManager:OnClientConnectInternal(NetworkMessage) (at C:\buildslave\unity\build\Extensions\Networking\Runtime\NetworkManager.cs:919)
+UnityEngine.Networking.NetworkConnection:InvokeHandler(Int16, NetworkReader, Int32) (at C:\buildslave\unity\build\Extensions\Networking\Runtime\NetworkConnection.cs:217)
+UnityEngine.Networking.NetworkConnection:InvokeHandlerNoData(Int16) (at C:\buildslave\unity\build\Extensions\Networking\Runtime\NetworkConnection.cs:199)
+UnityEngine.Networking.NetworkClient:Update() (at C:\buildslave\unity\build\Extensions\Networking\Runtime\NetworkClient.cs:718)
+UnityEngine.Networking.NetworkClient:UpdateClients() (at C:\buildslave\unity\build\Extensions\Networking\Runtime\NetworkClient.cs:950)
+UnityEngine.Networking.NetworkIdentity:UNetStaticUpdate() (at C:\buildslave\unity\build\Extensions\Networking\Runtime\NetworkIdentity.cs:1073)
+ 
+(Filename: C:/buildslave/unity/build/Extensions/Networking/Runtime/ClientScene.cs Line: 278)
+

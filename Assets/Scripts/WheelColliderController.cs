@@ -1,7 +1,8 @@
-﻿using UnityEngine;
+﻿using UnityEngine.Networking;
+using UnityEngine;
 using System.Collections;
 
-public class WheelColliderController : MonoBehaviour
+public class WheelColliderController : NetworkBehaviour
 {
     //Input
     IDrive[] controller;
@@ -30,12 +31,15 @@ public class WheelColliderController : MonoBehaviour
     float steeringInput;
 
     Rigidbody rigidbody;
+    [SerializeField]
+    Transform centerOfMass;
 
     // Use this for initialization
     void Start()
     {
         controller = GetComponentsInChildren<IDrive>();
         rigidbody = GetComponent<Rigidbody>();
+        rigidbody.centerOfMass = centerOfMass.localPosition;
         wheels = GetComponentsInChildren<WheelCollider>();
 
         gear = new float[]
@@ -54,6 +58,11 @@ public class WheelColliderController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!isLocalPlayer)
+        {
+            return;
+        }
+
         if (controller.Length > 0)
         {
             controller[currentController].UpdateUI();
@@ -88,27 +97,20 @@ public class WheelColliderController : MonoBehaviour
 
         if (currentRPM > maxRPM)
         {
-            currentRPM = 100000f;
+            currentRPM = maxRPM;
         }
 
+        //float brake = brakeInput * (brakePower / velocity);
         float brake = brakeInput * brakePower;
 
         maxTorqueAtRPM = (5252 * horsepower) / currentRPM;
-        horsepower = (maxTorqueAtRPM * currentRPM) / 5252;
+        horsepower = maxTorqueAtRPM * currentRPM / 5252;
         engineTorque = (gasInput * maxTorqueAtRPM);
 
         float driveTorque = (engineTorque * (gear[currentGear + 1] * finalDriveAxleRatio)) * 0.7f;
         velocity = rigidbody.velocity.magnitude;
 
-
-
-
-
-
-
-
-
-
+        //Debug.Log("                   " + driveTorque);
 
 
         for (int i = 0; i < 4; i++)
@@ -123,16 +125,29 @@ public class WheelColliderController : MonoBehaviour
             wheel.transform.rotation = rot;
         }
 
-        wheels[0].motorTorque = driveTorque;
-        wheels[1].motorTorque = driveTorque;
-        wheels[2].motorTorque = driveTorque;
-        wheels[3].motorTorque = driveTorque;
+        wheels[0].motorTorque = driveTorque / 4;
+        wheels[1].motorTorque = driveTorque / 4;
+        wheels[2].motorTorque = driveTorque / 4;
+        wheels[3].motorTorque = driveTorque / 4;
 
         wheels[0].brakeTorque = brake;
         wheels[1].brakeTorque = brake;
 
-        wheels[0].steerAngle = steeringInput * maxAngle;
-        wheels[1].steerAngle = steeringInput * maxAngle;
+        if (steeringInput > 0)
+        {
+            wheels[0].steerAngle = steeringInput * maxAngle / 2;
+            wheels[1].steerAngle = steeringInput * maxAngle;
+        }
+        else if (steeringInput < 0)
+        {
+            wheels[0].steerAngle = steeringInput * maxAngle;
+            wheels[1].steerAngle = steeringInput * maxAngle / 2;
+        }
+        else
+        {
+            wheels[0].steerAngle = 0;
+            wheels[1].steerAngle = 0;
+        }
     }
 
 }

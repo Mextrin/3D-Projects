@@ -94,7 +94,7 @@ public class MenuNavigation : MonoBehaviour
                 }
                 if (optionSettings.cameraPoint != null)
                 {
-                    camera.toMoveTo = optionSettings.cameraPoint;
+                    camera.SetFullTransform(optionSettings.cameraPoint);
                 }
             }
         }
