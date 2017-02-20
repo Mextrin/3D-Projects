@@ -16,8 +16,8 @@ public class CameraSpawn : NetworkBehaviour
             Camera.main.gameObject.SetActive(false);
             if (camera != null)
             {
-                FollowCarCamera spawnedCamera = Instantiate(camera, transform.position, transform.rotation).GetComponent<FollowCarCamera>();
-                spawnedCamera.car = transform;
+                FollowCamera spawnedCamera = Instantiate(camera, transform.position, transform.rotation).GetComponent<FollowCamera>();
+                spawnedCamera.moveTarget = transform;
             }
         }
     }

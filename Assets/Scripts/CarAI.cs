@@ -22,7 +22,7 @@ public class CarAI : MonoBehaviour, IDrive
         car = GetComponentInParent<RPMCarController>();
     }
 
-    public float Acceleration()
+    public float Acceleration(WheelColliderController vehicle)
     {
 
         if (requiredVelocity > car.velocity)
@@ -33,7 +33,7 @@ public class CarAI : MonoBehaviour, IDrive
         return 0.25f;
     }
 
-    public float Brake()
+    public float Brake(WheelColliderController vehicle)
     {
         if (requiredVelocity < car.velocity)
         {
@@ -43,7 +43,7 @@ public class CarAI : MonoBehaviour, IDrive
         return 0;
     }
 
-    public float Steering()
+    public float Steering(WheelColliderController vehicle)
     {
         float relativeAngle = Mathf.Abs(targets[0].transform.eulerAngles.y - transform.eulerAngles.y);
         float angleToTarget = Vector3.Angle(transform.forward, targets[0].transform.position - transform.position);
@@ -87,10 +87,5 @@ public class CarAI : MonoBehaviour, IDrive
         }
         return 1f;
 
-    }
-
-    public void UpdateUI()
-    {
-        return;
     }
 }

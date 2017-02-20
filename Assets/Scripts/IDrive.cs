@@ -3,8 +3,7 @@ using System.Collections;
 
 public interface IDrive
 {
-    float Acceleration();
-    float Brake();
-    float Steering();
-    void UpdateUI();
+    float Acceleration(WheelColliderController vehicle);
+    float Brake(WheelColliderController vehicle);
+    float Steering(WheelColliderController vehicle);
 }

@@ -64,6 +64,7 @@ public class PlayerMovement : MonoBehaviour
         else
             weapon.shoot = false;
 
+        //Rotation
         rotationX += Input.GetAxis("Mouse X");
         rotationY += Input.GetAxis("Mouse Y");
 
@@ -71,6 +72,8 @@ public class PlayerMovement : MonoBehaviour
 
         transform.localEulerAngles = new Vector3(0, rotationX, 0);
         camera.transform.localEulerAngles = new Vector3(rotationY, 0, 0);
+
+        //Movement
         gravity.velocity = new Vector3(0, direction.y, 0);
         transform.Translate(Vector3.forward * forwardMovement * speed * Time.deltaTime);
         transform.Translate(Vector3.right * rightMovement * speed * Time.deltaTime);

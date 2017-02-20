@@ -6,53 +6,35 @@ using UnityEngine.Networking;
 
 public class AutoConnect : NetworkBehaviour
 {
-    public string username;
-    [SerializeField]
-    Text nameField;
-    [SerializeField]
-    GameObject mainUI;
-
-    public GameObject playerObject;
-    public Transform spawnPoint;
-
-    public NetworkConnection conn;
+    public string localIP = "127.0.0.1";
+    public string remoteIP = "192.168.0.3";
+    public int port = 7777;
 
     // Use this for initialization
     void Start()
     {
-        NetworkManager network = GetComponent<NetworkManager>();
-        if (network != null)
+        Network.Connect(localIP, port);
+
+        if (Network.peerType == NetworkPeerType.Disconnected)
         {
-            network.StartClient();
-            network.StartHost();
+            NetworkServer.Listen(7777);
+            NetworkClient client = ClientScene.ConnectLocalServer();
+            client.RegisterHandler(MsgType.Connect, OnConnected);
         }
+
+        //if (Network.peerType == NetworkPeerType.Disconnected)
+        //{
+        //    Network.Connect(remoteIP, port);
+        //}
+
+
     }
 
-    public void Connect()
+    private void OnConnected(NetworkMessage msg)
     {
-        if (nameField.text.Length >= 6f)
-        {
-            username = nameField.text;
-        }
-
-        DisableUI();
-        
+        Debug.Log("Player connected");
     }
 
-    void DisableUI()
-    {
-        if (username.Length > 0)
-        {
-            mainUI.SetActive(false);
 
-            
-
-            var spawnedPlayer = (GameObject)Instantiate(playerObject, spawnPoint.position, spawnPoint.rotation);
-            NetworkServer.AddPlayerForConnection(connectionToServer, spawnedPlayer, playerControllerId);
-
-        }
-    }
-
-   
 
 }

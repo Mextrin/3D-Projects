@@ -2,11 +2,10 @@
 using UnityEngine;
 using System.Collections;
 
-public class WheelColliderController : NetworkBehaviour
+public class WheelColliderController : MonoBehaviour
 {
     //Input
-    IDrive[] controller;
-    int currentController;
+    IDrive controller;
 
     //CarInfo
     WheelCollider[] wheels;
@@ -33,14 +32,15 @@ public class WheelColliderController : NetworkBehaviour
     Rigidbody rigidbody;
     [SerializeField]
     Transform centerOfMass;
+    Seats seats;
 
     // Use this for initialization
     void Start()
     {
-        controller = GetComponentsInChildren<IDrive>();
         rigidbody = GetComponent<Rigidbody>();
         rigidbody.centerOfMass = centerOfMass.localPosition;
         wheels = GetComponentsInChildren<WheelCollider>();
+        seats = GetComponentInChildren<Seats>();
 
         gear = new float[]
             {
@@ -58,17 +58,16 @@ public class WheelColliderController : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!isLocalPlayer)
+        if (seats.seats[0].GetComponentInChildren<IDrive>() != controller)
         {
-            return;
+            controller = seats.seats[0].GetComponentInChildren<IDrive>();
         }
 
-        if (controller.Length > 0)
+        if (controller != null)
         {
-            controller[currentController].UpdateUI();
-            steeringInput = controller[currentController].Steering();
-            gasInput = controller[currentController].Acceleration();
-            brakeInput = controller[currentController].Brake();
+            steeringInput = controller.Steering(this);
+            gasInput = controller.Acceleration(this);
+            brakeInput = controller.Brake(this);
         }
 
         //if (Input.GetKeyDown(KeyCode.E))

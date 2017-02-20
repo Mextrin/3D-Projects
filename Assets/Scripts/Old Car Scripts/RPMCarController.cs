@@ -73,10 +73,9 @@ public class RPMCarController : MonoBehaviour
 
         if (controller.Length > 0)
         {
-            controller[currentController].UpdateUI();
-            steeringInput = controller[currentController].Steering();
-            gasInput = controller[currentController].Acceleration();
-            brakeInput = controller[currentController].Brake();
+            //steeringInput = controller[currentController].Steering(this);
+            //gasInput = controller[currentController].Acceleration(this);
+            //brakeInput = controller[currentController].Brake(this);
         }
 
         if (Input.GetKeyDown(KeyCode.E))
