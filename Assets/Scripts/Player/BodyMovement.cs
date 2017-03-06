@@ -1,35 +1,67 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
-public class BodyMovement : MonoBehaviour
+public class BodyMovement : Entity
 {
     [SerializeField]
     float maxSpeed;
     [SerializeField]
     float jumpPower;
+    [SerializeField]
+    float rotationSpeed;
 
+    CameraMovement camera;
     CharacterController controller;
-    Transform cameraPoint;
+    IWalk input;
+    Transform body;
 
     float rotationX, rotationY;
+    
 
     void Start()
     {
+        camera = GetComponentInChildren<CameraMovement>();
         controller = GetComponent<CharacterController>();
-        cameraPoint = GetComponentInChildren<CameraMovement>().transform;
+        body = transform.GetChild(0);
+        input = GetComponentInChildren<IWalk>();
     }
 
     void Update()
     {
+        float moveHorizontal = input.Horizontal(this);
+        float moveVertical = input.Vertical(this);
+
+        if (camera != null)
+        {
+
+            Vector3 cameraRot = camera.transform.eulerAngles;
+            cameraRot.x = 0f;
+            cameraRot.z = 0f;
+
+            body.rotation = Quaternion.Slerp(body.rotation, Quaternion.Euler(cameraRot), rotationSpeed  * Time.deltaTime);
+        }
+
         if (controller != null)
         {
-            float moveHorizontal = Input.GetAxis("Horizontal") * maxSpeed;
-            float moveVertical = Input.GetAxis("Vertical") * maxSpeed;
+            //float walkConstant;
+            //float moveH = Mathf.Abs(moveHorizontal);
+            //float moveV = Mathf.Abs(moveVertical);
+            //
+            //if (moveV > moveH)
+            //{
+            //    walkConstant = moveV;
+            //}
+            //else
+            //{
+            //    walkConstant = moveH;
+            //}
 
-
-            controller.Move(transform.forward * moveVertical * Time.deltaTime);
-            controller.Move(-transform.right * moveHorizontal * Time.deltaTime);
+            //controller.Move(body.forward * walkConstant * maxSpeed * Time.deltaTime);
+            controller.Move(-body.right * moveHorizontal * maxSpeed * Time.deltaTime);
+            controller.Move(body.forward * moveVertical * maxSpeed * Time.deltaTime);
         }
+
         //transform.Translate(Vector3.forward * moveVertical * Time.deltaTime);
         //transform.Translate(-Vector3.right * moveHorizontal * Time.deltaTime);
 

@@ -6,10 +6,12 @@ public class Interaction : MonoBehaviour
 {
     [SerializeField] float reachRange;
 
+    Transform camera;
+
     // Use this for initialization
     void Start()
     {
-        
+        camera = GetComponentInChildren<CameraMovement>().transform;
     }
 
     // Update is called once per frame
@@ -19,7 +21,7 @@ public class Interaction : MonoBehaviour
         {
 
             RaycastHit hit;
-            if (Physics.Raycast(transform.position, transform.forward, out hit, Mathf.Infinity))
+            if (Physics.Raycast(transform.position, camera.forward, out hit, Mathf.Infinity))
             {
                 if (Vector3.Distance(transform.position, hit.transform.position) <= reachRange)
                 {

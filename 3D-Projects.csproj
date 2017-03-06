@@ -52,6 +52,9 @@
     <Reference Include="UnityEngine">
       <HintPath>Library\UnityAssemblies\UnityEngine.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.Advertisements">
+      <HintPath>Library\UnityAssemblies\UnityEngine.Advertisements.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>Library\UnityAssemblies\UnityEngine.UI.dll</HintPath>
     </Reference>
@@ -67,6 +70,9 @@
     <Reference Include="UnityEngine.HoloLens">
       <HintPath>Library\UnityAssemblies\UnityEngine.HoloLens.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.Purchasing">
+      <HintPath>Library\UnityAssemblies\UnityEngine.Purchasing.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.VR">
       <HintPath>Library\UnityAssemblies\UnityEngine.VR.dll</HintPath>
     </Reference>
@@ -80,6 +86,7 @@
     <Compile Include="Assets\Scripts\CameraSpawn.cs" />
     <Compile Include="Assets\Scripts\CarAI.cs" />
     <Compile Include="Assets\Scripts\DayLightCycle.cs" />
+    <Compile Include="Assets\Scripts\Entity.cs" />
     <Compile Include="Assets\Scripts\FollowCamera.cs" />
     <Compile Include="Assets\Scripts\Health.cs" />
     <Compile Include="Assets\Scripts\IDrive.cs" />
@@ -106,15 +113,12 @@
     <Compile Include="Assets\Scripts\Old Car Scripts\carControls.cs" />
     <Compile Include="Assets\Scripts\PauseMenu.cs" />
     <Compile Include="Assets\Scripts\Player\BodyMovement.cs" />
+    <Compile Include="Assets\Scripts\Player\BodyRotation.cs" />
     <Compile Include="Assets\Scripts\Player\CameraMovement.cs" />
-    <Compile Include="Assets\Scripts\Player\PlayerMovement.cs" />
     <Compile Include="Assets\Scripts\PlayerInput.cs" />
     <Compile Include="Assets\Scripts\Pre-Loaded\AssetCarController.cs" />
-    <Compile Include="Assets\Scripts\Projectile.cs" />
     <Compile Include="Assets\Scripts\Seats.cs" />
-    <Compile Include="Assets\Scripts\Shooter.cs" />
     <Compile Include="Assets\Scripts\TrackStreching.cs" />
-    <Compile Include="Assets\Scripts\Turret\Turret.cs" />
     <Compile Include="Assets\Scripts\WheelColliderController.cs" />
   </ItemGroup>
   <ItemGroup>

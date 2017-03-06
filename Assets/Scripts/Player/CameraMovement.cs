@@ -54,7 +54,7 @@ public class CameraMovement : MonoBehaviour
                             transform.eulerAngles = new Vector3(minLimitY, transform.eulerAngles.y, transform.eulerAngles.z);
                         }
                     }
-                    else
+                    else 
                     {
                         if (rotationY > 0)
                         {
